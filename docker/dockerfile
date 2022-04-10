@@ -76,7 +76,7 @@ RUN apt update && apt install -y --no-install-recommends libglew-dev \
     libflann-dev
 
 # Build OpenCV
-RUN cd /root/opencv && git checkout 3.3.0 && cd ../opencv_contrib && git checkout 3.3.0 && \
+RUN cd /root/opencv && git checkout 3.1.0 && cd ../opencv_contrib && git checkout 3.1.0 && \
     cd /root/opencv && mkdir build && cd build && \
     cmake \
 	  -DBUILD_TIFF=ON \
@@ -187,9 +187,11 @@ ENV NVIDIA_DRIVER_CAPABILITIES graphics,utility,compute
 RUN echo 'root:midea123' | chpasswd
 
 # modify the sshd_config
-RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed -i 's/\#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+
+RUN echo 'export DISPLAY=:0' >> /etc/profile
 
 ENV NOTVISIBLE "in users profile"
 
